@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RetroVision TV Network - 24/7 Public Domain Broadcast</title>
+    
+    <title>RetroVision TV Network - 24/7 Retro Streams & Vintage TV Simulator</title>
+    <meta name="description" content="Watch classic 80s MTV broadcasts, retro cartoons, vintage horror movies, and old-school television simulation. 24/7 nostalgia trip on a CRT screen simulator.">
+    <meta name="keywords" content="retro tv, 80s mtv broadcast live, saturday morning cartoons, vintage horror movies, classic sitcoms, watch retro commercials online">
+    
     <style>
         /* Responsive Reset */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -21,7 +25,17 @@
             overflow-x: hidden;
         }
 
-        /* LIVE breaking news style banner */
+        .seo-main-title {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
         .unmute-banner { 
             background: #ff0055; 
             color: #fff; 
@@ -33,193 +47,164 @@
             border-radius: 5px; 
             text-align: center; 
             width: 100%; 
-            max-width: 1200px; 
-            font-size: 14px; 
-            box-shadow: 0 0 15px #ff0055; 
+            max-width: 1000px;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
         }
-        
-        /* Main Grid TV Box - Mobile-First Layout */
-        .tv-main-container { 
-            display: grid;
-            grid-template-columns: 1fr;
-            width: 100%; 
-            max-width: 1200px; 
-            background: #151515; 
-            border: 6px solid #2c2c2c; 
-            border-radius: 15px; 
-            padding: 12px; 
-            box-shadow: 0 0 30px rgba(0,0,0,0.9); 
-            gap: 12px; 
-        }
-        
-        /* Control Tuning Panels (Grids for layout safety) */
-        .panel-side { 
+
+        .tv-container { 
             display: grid; 
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px; 
-            width: 100%;
+            grid-template-columns: 1fr; 
+            gap: 15px; 
+            width: 100%; 
+            max-width: 1000px; 
         }
-        
-        /* Heavy Duty Retro Buttons */
+
+        @media(min-width: 800px) {
+            .tv-container { grid-template-columns: 160px 1fr 160px; }
+        }
+
+        .panel-side { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+            justify-content: center;
+        }
+
+        @media(max-width: 799px) {
+            .panel-side {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 5px;
+            }
+        }
+
         .btn-ch { 
-            background: #222; 
+            background: #111; 
             color: #00ff66; 
             border: 2px solid #00ff66; 
-            padding: 10px 4px; 
-            cursor: pointer; 
-            font-size: 11px; 
+            padding: 10px 5px; 
+            font-family: 'Courier New', monospace; 
             font-weight: bold; 
-            text-transform: uppercase; 
-            border-radius: 5px; 
-            transition: all 0.2s; 
-            text-align: center; 
-            box-shadow: inset 0 0 5px rgba(0,255,102,0.2); 
-            width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            cursor: pointer; 
+            border-radius: 4px; 
+            text-align: center;
+            font-size: 11px;
+            transition: all 0.15s ease;
         }
+
         .btn-ch:hover, .btn-ch.active { 
             background: #00ff66; 
             color: #000; 
-            box-shadow: 0 0 10px #00ff66; 
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
         }
-        
-        /* CRT Screen Layout */
-        .screen-section { 
+
+        .panel-center { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+        }
+
+        .tv-frame { 
+            background: #151515; 
+            border: 8px solid #222; 
+            border-radius: 10px; 
             width: 100%; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 12px; 
-        }
-        
-        /* Aspect Ratio Box 16:9 */
-        .screen-wrapper { 
             position: relative; 
-            padding-bottom: 56.25%; 
-            height: 0; 
+            padding-top: 75%; /* 4:3 Aspect Ratio */
+            box-shadow: inset 0 0 20px #000;
+            overflow: hidden;
+        }
+
+        .screen-engine { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
             background: #000; 
-            border: 4px solid #111; 
-            border-radius: 5px; 
-            overflow: hidden; 
-            box-shadow: inset 0 0 20px rgba(0,0,0,1); 
+            z-index: 1;
         }
-        
-        .screen-offline { 
+
+        .crt-overlay { 
             position: absolute; 
-            top: 0; left: 0; width: 100%; height: 100%; 
-            display: flex; 
-            flex-direction: column; 
-            align-hidden: center; 
-            align-items: center; 
-            justify-content: center; 
-            background: radial-gradient(circle, #1a1a1a 0%, #050505 100%); 
-        }
-        
-        .scanline { 
-            position: absolute; 
-            top: 0; left: 0; width: 100%; height: 100%; 
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); 
-            background-size: 100% 4px; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
             pointer-events: none; 
-        }
-        
-        .static-noise { 
-            font-size: 20px; 
-            font-weight: bold; 
-            text-shadow: 0 0 10px #00ff66; 
-            margin-bottom: 5px; 
-        }
-        
-        /* Terminal Signal Teletext Panel */
-        .info-panel { 
-            background: #000; 
-            border: 2px solid #222; 
-            padding: 10px; 
-            font-size: 12px; 
-            color: #00ff66; 
-            border-radius: 5px; 
-            min-height: 50px; 
-            text-shadow: 0 0 5px #00ff66; 
-            line-height: 1.4; 
-            white-space: pre-line;
+            z-index: 10; 
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 3px, 3px 100%;
         }
 
-        /* Responsive Footer Styles */
-        .tv-footer {
-            margin-top: 25px;
+        .scanline {
             width: 100%;
-            max-width: 1200px;
-            text-align: center;
-            font-size: 11px;
-            color: #555;
-            border-top: 1px dashed #222;
-            padding-top: 15px;
-            line-height: 1.6;
-        }
-        
-        .tv-footer a {
-            color: #444;
-            text-decoration: none;
-            margin: 0 10px;
-            transition: color 0.2s;
-        }
-        
-        .tv-footer a:hover {
-            color: #00ff66;
-            text-decoration: underline;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 11;
+            pointer-events: none;
         }
 
-        /* Master Grid Breakpoint Desktop / F12 Layout Configuration */
-        @media (min-width: 800px) {
-            .tv-main-container { 
-                grid-template-columns: 150px 1fr 150px; 
-                align-items: center;
-                padding: 15px;
-            }
-            
-            .panel-side { 
-                grid-template-columns: 1fr; 
-                gap: 8px; 
-            }
-            
-            .btn-ch {
-                padding: 12px 4px;
-                font-size: 11px;
-            }
-            
-            .static-noise {
-                font-size: 28px;
-            }
+        .info-panel { 
+            width: 100%; 
+            background: #111; 
+            border: 2px solid #222; 
+            padding: 8px; 
+            border-radius: 4px; 
+            text-align: center;
         }
+
+        #nowPlaying { font-weight: bold; font-size: 14px; color: #00ff66; }
+        .static-noise { color: #ff0055; font-size: 12px; margin-top: 3px; font-weight: bold; }
+
+        .tv-footer { 
+            margin-top: 15px; 
+            text-align: center; 
+            font-size: 11px; 
+            color: #444; 
+            width: 100%;
+            max-width: 900px;
+            border-top: 1px solid #111;
+            padding-top: 10px;
+        }
+
+        .tv-footer a { color: #00ff66; text-decoration: none; margin: 0 5px; }
+        .tv-footer a:hover { text-decoration: underline; }
+        .seo-text { margin-top: 10px; text-align: justify; font-size: 9px; color: #333; line-height: 1.4; }
     </style>
+    <script src="https://www.youtube.com/iframe_api" async></script>
 </head>
 <body>
 
+    <h1 class="seo-main-title">RetroVision TV Network: 24/7 Vintage Television Simulator</h1>
+
     <div class="unmute-banner" id="unmuteBtn">
-        📺 STREAM SIGNAL READY. CLICK HERE TO DECODE SIGNAL & START BROADCAST!
+        ⚠️ AUDIO MUTED. CLICK HERE TO DECODE RETRO SIGNAL & UNMUTE!
     </div>
 
-    <div class="tv-main-container">
+    <div class="tv-container">
         <div class="panel-side">
-            <button class="btn-ch active" onclick="switchChannel(0)">CH 01: TOONS</button>
-            <button class="btn-ch" onclick="switchChannel(1)">CH 02: HORROR</button>
-            <button class="btn-ch" onclick="switchChannel(2)">CH 03: SCI-FI</button>
-            <button class="btn-ch" onclick="switchChannel(3)">CH 04: NOIR</button>
-            <button class="btn-ch" onclick="switchChannel(4)">CH 05: KUNG-FU</button>
-            <button class="btn-ch" onclick="switchChannel(5)">CH 06: THRILLER</button>
+            <button class="btn-ch" onclick="switchChannel(0)">CH 01: TOONS</button>
+            <button class="btn-ch" onclick="switchChannel(1)">CH 02: MTV VAULT</button>
+            <button class="btn-ch" onclick="switchChannel(2)">CH 03: HORROR</button>
+            <button class="btn-ch" onclick="switchChannel(3)">CH 04: GAMING</button>
+            <button class="btn-ch" onclick="switchChannel(4)">CH 05: SYNTH</button>
+            <button class="btn-ch" onclick="switchChannel(5)">CH 06: ADS</button>
         </div>
 
-        <div class="screen-section">
-            <div class="screen-wrapper">
-                <div class="screen-offline">
-                    <div class="scanline"></div>
-                    <div class="static-noise" id="videoStatus">SIGNAL LOCK</div>
-                    <div style="font-size: 12px; color: #888;" id="streamTime">BROADCAST TIMECODE: 00:00:00</div>
-                </div>
+        <div class="panel-center">
+            <div class="tv-frame">
+                <div class="crt-overlay"></div>
+                <div class="scanline"></div>
+                <div id="yt_embed_player" class="screen-engine"></div>
             </div>
             <div class="info-panel">
                 <div id="nowPlaying">Connecting to main feed...</div>
+                <div class="static-noise" id="videoStatus">SIGNAL LOCK</div>
+                <div style="font-size: 12px; color: #888; margin-top: 2px;" id="streamTime">BROADCAST TIMECODE: 00:00:00</div>
             </div>
         </div>
 
@@ -234,14 +219,17 @@
     </div>
 
     <footer class="tv-footer">
-        <p>&copy; 2026 RetroVision TV Network. All retro streams broadcast historical content archive data.</p>
+        <p>&copy; 2026 RetroVision TV Network. All retro streams broadcast historical archive data.</p>
         <p>
             <a href="privacy.html">Privacy Policy</a> | 
             <a href="dmca.html">DMCA Copyright Notice</a>
         </p>
-        <p style="margin-top: 8px; color: #333; font-size: 10px;">Contact: retrovisionnet [at] gmail.com</p>
+        <div class="seo-text">
+            <h2>Interactive 80s and 90s Television Simulation Museum</h2>
+            <p>RetroVision is a non-commercial web archive built to simulate the vintage feel of channel-surfing classic broadcasting networks. Turn on our CRT screen overlay to watch public domain 90s cartoons, retro MTV style clips, old commercials, and vintage true crime documentaries. All streams are served dynamically via official YouTube Iframe embedding API to ensure copyright compliance and protect creator monetization.</p>
+        </div>
     </footer>
 
-    <script src="tv_engine.js"></script>
+    <script src="js/tv_engine.js"></script>
 </body>
 </html>
