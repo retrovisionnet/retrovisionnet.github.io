@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetroVision TV Network - 24/7 Public Domain Broadcast</title>
+    <style>
+        /* Responsive Reset */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            background: #0a0a0a; 
+            color: #00ff66; 
+            font-family: 'Courier New', monospace; 
+            padding: 10px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: flex-start; 
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* LIVE breaking news style banner */
+        .unmute-banner { 
+            background: #ff0055; 
+            color: #fff; 
+            padding: 12px; 
+            margin-bottom: 15px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border: 3px dashed #fff; 
+            border-radius: 5px; 
+            text-align: center; 
+            width: 100%; 
+            max-width: 1200px; 
+            font-size: 14px; 
+            box-shadow: 0 0 15px #ff0055; 
+        }
+        
+        /* Main Grid TV Box - Mobile-First Layout */
+        .tv-main-container { 
+            display: grid;
+            grid-template-columns: 1fr;
+            width: 100%; 
+            max-width: 1200px; 
+            background: #151515; 
+            border: 6px solid #2c2c2c; 
+            border-radius: 15px; 
+            padding: 12px; 
+            box-shadow: 0 0 30px rgba(0,0,0,0.9); 
+            gap: 12px; 
+        }
+        
+        /* Control Tuning Panels (Grids for layout safety) */
+        .panel-side { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px; 
+            width: 100%;
+        }
+        
+        /* Heavy Duty Retro Buttons */
+        .btn-ch { 
+            background: #222; 
+            color: #00ff66; 
+            border: 2px solid #00ff66; 
+            padding: 10px 4px; 
+            cursor: pointer; 
+            font-size: 11px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            border-radius: 5px; 
+            transition: all 0.2s; 
+            text-align: center; 
+            box-shadow: inset 0 0 5px rgba(0,255,102,0.2); 
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .btn-ch:hover, .btn-ch.active { 
+            background: #00ff66; 
+            color: #000; 
+            box-shadow: 0 0 10px #00ff66; 
+        }
+        
+        /* CRT Screen Layout */
+        .screen-section { 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+        }
+        
+        /* Aspect Ratio Box 16:9 */
+        .screen-wrapper { 
+            position: relative; 
+            padding-bottom: 56.25%; 
+            height: 0; 
+            background: #000; 
+            border: 4px solid #111; 
+            border-radius: 5px; 
+            overflow: hidden; 
+            box-shadow: inset 0 0 20px rgba(0,0,0,1); 
+        }
+        
+        .screen-offline { 
+            position: absolute; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            align-hidden: center; 
+            align-items: center; 
+            justify-content: center; 
+            background: radial-gradient(circle, #1a1a1a 0%, #050505 100%); 
+        }
+        
+        .scanline { 
+            position: absolute; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); 
+            background-size: 100% 4px; 
+            pointer-events: none; 
+        }
+        
+        .static-noise { 
+            font-size: 20px; 
+            font-weight: bold; 
+            text-shadow: 0 0 10px #00ff66; 
+            margin-bottom: 5px; 
+        }
+        
+        /* Terminal Signal Teletext Panel */
+        .info-panel { 
+            background: #000; 
+            border: 2px solid #222; 
+            padding: 10px; 
+            font-size: 12px; 
+            color: #00ff66; 
+            border-radius: 5px; 
+            min-height: 50px; 
+            text-shadow: 0 0 5px #00ff66; 
+            line-height: 1.4; 
+            white-space: pre-line;
+        }
+
+        /* Responsive Footer Styles */
+        .tv-footer {
+            margin-top: 25px;
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+            font-size: 11px;
+            color: #555;
+            border-top: 1px dashed #222;
+            padding-top: 15px;
+            line-height: 1.6;
+        }
+        
+        .tv-footer a {
+            color: #444;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.2s;
+        }
+        
+        .tv-footer a:hover {
+            color: #00ff66;
+            text-decoration: underline;
+        }
+
+        /* Master Grid Breakpoint Desktop / F12 Layout Configuration */
+        @media (min-width: 800px) {
+            .tv-main-container { 
+                grid-template-columns: 150px 1fr 150px; 
+                align-items: center;
+                padding: 15px;
+            }
+            
+            .panel-side { 
+                grid-template-columns: 1fr; 
+                gap: 8px; 
+            }
+            
+            .btn-ch {
+                padding: 12px 4px;
+                font-size: 11px;
+            }
+            
+            .static-noise {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="unmute-banner" id="unmuteBtn">
+        📺 STREAM SIGNAL READY. CLICK HERE TO DECODE SIGNAL & START BROADCAST!
+    </div>
+
+    <div class="tv-main-container">
+        <div class="panel-side">
+            <button class="btn-ch active" onclick="switchChannel(0)">CH 01: TOONS</button>
+            <button class="btn-ch" onclick="switchChannel(1)">CH 02: HORROR</button>
+            <button class="btn-ch" onclick="switchChannel(2)">CH 03: SCI-FI</button>
+            <button class="btn-ch" onclick="switchChannel(3)">CH 04: NOIR</button>
+            <button class="btn-ch" onclick="switchChannel(4)">CH 05: KUNG-FU</button>
+            <button class="btn-ch" onclick="switchChannel(5)">CH 06: THRILLER</button>
+        </div>
+
+        <div class="screen-section">
+            <div class="screen-wrapper">
+                <div class="screen-offline">
+                    <div class="scanline"></div>
+                    <div class="static-noise" id="videoStatus">SIGNAL LOCK</div>
+                    <div style="font-size: 12px; color: #888;" id="streamTime">BROADCAST TIMECODE: 00:00:00</div>
+                </div>
+            </div>
+            <div class="info-panel">
+                <div id="nowPlaying">Connecting to main feed...</div>
+            </div>
+        </div>
+
+        <div class="panel-side">
+            <button class="btn-ch" onclick="switchChannel(6)">CH 07: MYSTERY</button>
+            <button class="btn-ch" onclick="switchChannel(7)">CH 08: ACTION</button>
+            <button class="btn-ch" onclick="switchChannel(8)">CH 09: COMEDY</button>
+            <button class="btn-ch" onclick="switchChannel(9)">CH 10: CYBER</button>
+            <button class="btn-ch" onclick="switchChannel(10)">CH 11: RELAX</button>
+            <button class="btn-ch" onclick="switchChannel(11)">CH 12: SPACE</button>
+        </div>
+    </div>
+
+    <footer class="tv-footer">
+        <p>&copy; 2026 RetroVision TV Network. All retro streams broadcast historical content archive data.</p>
+        <p>
+            <a href="privacy.html">Privacy Policy</a> | 
+            <a href="dmca.html">DMCA Copyright Notice</a>
+        </p>
+        <p style="margin-top: 8px; color: #333; font-size: 10px;">Contact: retrovisionnet [at] gmail.com</p>
+    </footer>
+
+    <script src="tv_engine.js"></script>
+</body>
+</html>
